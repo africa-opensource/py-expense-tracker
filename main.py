@@ -1,6 +1,6 @@
 import csv
 project_name = "Ey Expense Tracker"
-underline = "================================================"
+underline = "=============================================================="
 
 def display_menu():
     print("Select your options")
@@ -20,7 +20,7 @@ def add_expense():
     print("Amount(GHS): ",amount)
     print("Date: ",date)
     print(underline)
-    yes_or_no = input("Are you sure you want to add expenses: ")
+    yes_or_no = input("Are you sure you want to add expenses(Yes/No): ")
     if yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES":
         with open("expenses.csv", mode='a', newline='') as file:
             writer = csv.writer(file)
@@ -38,32 +38,47 @@ def view_expense():
             print("No Expenses to display")
         else:
             print("Your Expense Summary")
+            print(underline)
         for expense in expenses:
             print(f"Description: {expense[0]},\t\t Amount(GHS): {expense[1]},\t\t Date: {expense[2]}")
+        print(underline)
 def update_expense():
-    #Update your expenses using description key
-    description_key = input("Enter a key to search for expense you want to update: ") 
-    amount_key = float(input("Enter an amount to search for the amount you want to update: "))
-    with open("expenses.csv",mode="r") as file:
+    description_key = input("Enter the key to search for the expense you want to update: ")
+    amount_key = float(input("Enter it's corresponding amount in (GHS): "))
+
+    with open("expenses.csv", mode="r") as file:
         reader = csv.reader(file)
         expenses = list(reader)
+
     expense_found = False
     for expense in expenses:
-        if expense[0] == description_key and expense[1] == str(amount_key):
+        if expense[0] == description_key and float(expense[1]) == amount_key:
+            expense[1] = float(input("Enter the new amount of expense in (GHS): "))
+            expense[0] = input("Enter the new category of expense: ")
+            expense[2] = input("Enter the new date in this form dd/mm/yyyy: ")
+            print(underline)
             expense_found = True
-            new_amount = float(input("Enter the new amount of expense in GHS: "))
-            new_description = input("Enter the new category of expense: ")
-            new_date = input("Enter the new date in this form dd/mm/yyyy: ")
-            print("Description: ",new_description)
-            print("Amount: ",new_amount)
-            print("Date: ",new_date)
-            print("Expense  updated successfully.")
-            with open("expenses.csv", mode="w", newline="") as file:
-                writer = csv.writer(file)
-                writer.writerows(expenses)
-        break
-    if not expense_found:
-        print("Expense  not found.")
+            print("Description: ",expense[0])
+            print("Amount(GHS): ",expense[1])
+            print("Date: ",expense[2])
+            print(underline)
+            break
+    yes_or_no = input("Are you sure you want to update expenses(Yes/No): ")
+    if expense_found and (yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES"):
+        with open("expenses.csv", mode="w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(expenses)
+        print("Expenses updated successfully.")
+    else:
+        print("Expense not found.")
+    print(underline)
+def exit_expense():
+    yes_or_no = input("Are you sure you want to exit expenses(Yes/No): ")
+    if yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES":
+        print("Exit expenses successful")
+    else:
+         print("Aborted")
+    print(underline)
 
 def main():
     print(project_name)
@@ -82,13 +97,16 @@ def main():
             print(underline) 
             view_expense()
         elif option == 3:
-              print("Update Expenses")
-              print(underline)
-              update_expense()
+            print("Update Expenses Option")
+            print(underline)
+            update_expense()
         elif option == 4:
-              print("Exit Expenses") 
+            print("Exit Expenses Option") 
+            print(underline)
+            exit_expense()
+
         else :
-              print("Invalid Option")
+            print("Invalid Option")
 
 
 if __name__ == "__main__":
