@@ -8,7 +8,8 @@ def display_menu():
     print("1. Add expenses")
     print("2. View expenses")
     print("3. Update expenses")
-    print("4. Exit expenses")
+    print("4. Delete expenses")
+    print("5. Exit expenses ")
 
 def add_expense():
     #Request for the details of each of the expenses
@@ -21,13 +22,13 @@ def add_expense():
     print("Date: ",date)
     print(underline)
     yes_or_no = input("Are you sure you want to add expenses(Yes/No): ")
-    if yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES":
+    if yes_or_no in ["yes","Yes","y","Y","YES"]:
         with open("expenses.csv", mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([description, amount, date])
-        print("Expenses added successfully")
+        print("Expenses added successfully.")
     else:
-         print("Aborted")
+         print("Add expense unsuccessful.")
     print(underline)
 def view_expense():
     #View your expenses
@@ -45,6 +46,7 @@ def view_expense():
 def update_expense():
     description_key = input("Enter the key to search for the expense you want to update: ")
     amount_key = float(input("Enter it's corresponding amount in (GHS): "))
+    print(underline)
 
     with open("expenses.csv", mode="r") as file:
         reader = csv.reader(file)
@@ -62,22 +64,20 @@ def update_expense():
             print("Amount(GHS): ",expense[1])
             print("Date: ",expense[2])
             print(underline)
+            yes_or_no = input("Are you sure you want to update expenses(Yes/No): ")
             break
-    yes_or_no = input("Are you sure you want to update expenses(Yes/No): ")
-    if expense_found and (yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES"):
+    else:
+        print("Expense Not Found")
+    if expense_found and (yes_or_no in ["yes","Yes","y","Y","YES"]):
         with open("expenses.csv", mode="w", newline="") as file:
             writer = csv.writer(file)
             writer.writerows(expenses)
         print("Expenses updated successfully.")
     else:
-        print("Expense not found.")
+        print("Expense update unsuccessful.")
     print(underline)
 def exit_expense():
-    yes_or_no = input("Are you sure you want to exit expenses(Yes/No): ")
-    if yes_or_no == "yes" or "Yes" or "y" or "Y" or "YES":
-        print("Exit expenses successful")
-    else:
-         print("Aborted")
+    print("Exited successfully.")
     print(underline)
 
 def main():
@@ -86,7 +86,7 @@ def main():
     display_menu()
     print(underline)
     option = 0
-    while option != 4:
+    while option != 5:
         option = int(input("Choose your option: "))
         if option == 1:
             print("Add Expenses Option")
@@ -101,12 +101,16 @@ def main():
             print(underline)
             update_expense()
         elif option == 4:
+            print("Delete Expense Option")
+            print(underline)
+        elif option == 5:
             print("Exit Expenses Option") 
             print(underline)
             exit_expense()
 
         else :
-            print("Invalid Option")
+            print("Invalid Option try another option.")
+            print(underline)
 
 
 if __name__ == "__main__":
