@@ -76,8 +76,41 @@ def update_expense():
     else:
         print("Expense update unsuccessful.")
     print(underline)
+def delete_expense():
+    #Delete Expense Option
+    description_key = input("Enter the key to search for the expense you want to delete: ")
+    amount_key = float(input("Enter it's corresponding amount in (GHS): "))
+    print(underline)
+
+    with open("expenses.csv", mode="r") as file:
+        reader = csv.reader(file)
+        expenses = list(reader)
+
+    expense_found = False
+    for expense in expenses:
+        if expense[0] == description_key and float(expense[1]) == amount_key:
+            expense_found = True
+            expenses.remove(expense)
+            print(underline)
+            print("Description: ", expense[0])
+            print("Amount(GHS): ", expense[1])
+            print("Date: ", expense[2])
+            print(underline)
+            yes_or_no = input("Are you sure you want to delete expenses(Yes/No): ")
+            break
+    else:
+        print("Expense not found.")
+    if expense_found and yes_or_no in ["YES","y","yes","Yes"]:
+        with open("expenses.csv", mode="w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(expenses)
+        print("Expense deleted successfully")
+    else:
+        print(underline)
+        print("Expense Delete Unsuccessful. ")
+    print(underline)
 def exit_expense():
-    print("Exited successfully.")
+    print("Exited successfully!.")
     print(underline)
 
 def main():
@@ -103,15 +136,14 @@ def main():
         elif option == 4:
             print("Delete Expense Option")
             print(underline)
+            delete_expense()
         elif option == 5:
             print("Exit Expenses Option") 
             print(underline)
             exit_expense()
-
         else :
             print("Invalid Option try another option.")
             print(underline)
-
 
 if __name__ == "__main__":
         main()
