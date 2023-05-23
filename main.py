@@ -1,4 +1,6 @@
 import csv
+import os
+from terminaltables import AsciiTable
 project_name = "Ey Expense Tracker"
 underline = "=============================================================="
 
@@ -17,21 +19,21 @@ def add_expense():
     description = input("Enter category of expense: ")
     date  = input("Enter date in this form dd/mm/yyyy: ")
     print(underline)
-    print("Description: ",description)
-    print("Amount(GHS): ",amount)
-    print("Date: ",date)
-    print(underline)
-    yes_or_no = input("Are you sure you want to add expenses(Yes/No): ")
+    data = [description,amount,date]
+    table = AsciiTable([["Description","Amount(GHS)","Date"],data])
+    print(table.table)
+    yes_or_no = input("Are you sure you want to add this expenses(Yes(y)/No(n)): ")
     if yes_or_no in ["yes","Yes","y","Y","YES"]:
         with open("expenses.csv", mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([description, amount, date])
         print("Expenses added successfully.")
     else:
-         print("Add expense unsuccessful.")
+         print("Add expense Unsuccessful.")
     print(underline)
 def view_expense():
     #View your expenses
+    data = [["Description","Amount(GHS)","Date"]]
     with open("expenses.csv",mode="r") as file:
         reader = csv.reader(file)
         expenses = list(reader)
@@ -39,14 +41,16 @@ def view_expense():
             print("No Expenses to display")
         else:
             print("Your Expense Summary")
-            print(underline)
         for expense in expenses:
-            print(f"Description: {expense[0]},\t\t Amount(GHS): {expense[1]},\t\t Date: {expense[2]}")
+            data.append(expense)
+        table = AsciiTable(data)
+        print(table.table)
         print(underline)
 def update_expense():
     description_key = input("Enter the key to search for the expense you want to update: ")
     amount_key = float(input("Enter it's corresponding amount in (GHS): "))
     print(underline)
+    data = [["Description","Amount(GHS)","Date"]]
 
     with open("expenses.csv", mode="r") as file:
         reader = csv.reader(file)
@@ -60,11 +64,10 @@ def update_expense():
             expense[2] = input("Enter the new date in this form dd/mm/yyyy: ")
             print(underline)
             expense_found = True
-            print("Description: ",expense[0])
-            print("Amount(GHS): ",expense[1])
-            print("Date: ",expense[2])
-            print(underline)
-            yes_or_no = input("Are you sure you want to update expenses(Yes/No): ")
+            data.append(expense)
+            table = AsciiTable(data)
+            print(table.table)
+            yes_or_no = input("Are you sure you want to update this expenses(Yes(y)/No(n)): ")
             break
     else:
         print("Expense Not Found")
@@ -72,15 +75,16 @@ def update_expense():
         with open("expenses.csv", mode="w", newline="") as file:
             writer = csv.writer(file)
             writer.writerows(expenses)
-        print("Expenses updated successfully.")
+        print("Expenses Updated Successfully.")
     else:
-        print("Expense update unsuccessful.")
+        print("Expense Update Unsuccessful.")
     print(underline)
 def delete_expense():
     #Delete Expense Option
     description_key = input("Enter the key to search for the expense you want to delete: ")
     amount_key = float(input("Enter it's corresponding amount in (GHS): "))
     print(underline)
+    data = [["Description","Amount(GHS)","Date"]]
 
     with open("expenses.csv", mode="r") as file:
         reader = csv.reader(file)
@@ -91,12 +95,11 @@ def delete_expense():
         if expense[0] == description_key and float(expense[1]) == amount_key:
             expense_found = True
             expenses.remove(expense)
-            print(underline)
-            print("Description: ", expense[0])
-            print("Amount(GHS): ", expense[1])
-            print("Date: ", expense[2])
-            print(underline)
-            yes_or_no = input("Are you sure you want to delete expenses(Yes/No): ")
+            data.append(expense)
+            table = AsciiTable(data)
+            print(table.table)
+
+            yes_or_no = input("Are you sure you want to delete this expenses(Yes(y)/No(n)): ")
             break
     else:
         print("Expense not found.")
@@ -104,10 +107,10 @@ def delete_expense():
         with open("expenses.csv", mode="w", newline="") as file:
             writer = csv.writer(file)
             writer.writerows(expenses)
-        print("Expense deleted successfully")
+        print("Expense Deleted Successfully")
     else:
         print(underline)
-        print("Expense Delete Unsuccessful. ")
+        print("Expense Delete Unsuccessful... ")
     print(underline)
 def exit_expense():
     print("Exited successfully!.")
