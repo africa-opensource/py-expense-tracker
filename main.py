@@ -1,5 +1,4 @@
 import csv
-import os
 from terminaltables import AsciiTable
 project_name = "Ey Expense Tracker"
 underline = "=============================================================="
